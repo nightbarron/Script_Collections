@@ -1,6 +1,6 @@
  #!/bin/bash
 chat_id="-567723202"        # Default
-token="<token>"
+token="1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E"
 interface="ens192" #Network interface
 
 mem_threshold=95; cpu_threshold=95; disk_threshold=95; inode_threshold=95; #Percent

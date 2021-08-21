@@ -1,7 +1,7 @@
  #!/bin/bash
 chat_id="-567723202"        # Default
 domainName=""
-token="<token>"
+token="1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E"
 
 # pip install sslchecker
 

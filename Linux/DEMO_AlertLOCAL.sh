@@ -1,17 +1,18 @@
  #!/bin/bash
-#chat_id="-1001282086041"
-chat_id=""
-token=""
+chat_id="-567723202"
+token="1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E"
+#https://api.telegram.org/bot<Token>/getUpdates
 interface="ens33" #Network interface
-time_report=("16:48" "16:50" "16:52")
+time_report=("08:00" "12:00" "20:00")
+#ip_sv="103.200.23.17"
+domain_name=("tivixiaomi.com" "ahihi.com")
 # USING THIS FILE TO SAVE OLD WEB STATE
 LOG_STATUS_PATH="/root/scripts/domains.status"
 
 mem_threshold=95; cpu_threshold=95; disk_threshold=95; inode_threshold=95; #Percent
 bwin_threshold=90; bwout_threshold=90; #MB
 my_text=""  #String contain alert
-#ip_sv=$(ip a | grep -w inet | grep -Ev "127.0|192.168" | awk '{print $2}' | head -n 1 | awk -F "/" '{print $1}')
-ip_sv="192.168.75.50"
+ip_sv=$(ip a show ${interface} | grep -w inet | awk '{print $2}' | head -n 1 | awk -F "/" '{print $1}')
 
 # Global Variables
 cpu_usage=""
@@ -21,7 +22,6 @@ inode_usage=""
 bw=""
 bw_incoming=""
 bw_outcoming=""
-domain_name=("ahihi.com" "tivixiaomi.com")
 
 get_domains_status(){
     result="`cat ${LOG_STATUS_PATH}`"
@@ -60,21 +60,22 @@ domain_checker(){
 	for dn in "${domain_name[@]}"; do
         # GET old status
         countDomainIndex=$(($countDomainIndex + 1))
-        echo $countDomainIndex
         domainOldStatus="$(echo ${domains_status} | cut -d " " -f ${countDomainIndex})"
-        echo $dn : $domainOldStatus
+        #echo $dn : $domainOldStatus
         # Checking current
         domainCurrentStatus="OK"
-		if [[ -z `curl -I http://"$dn" --connect-timeout 30 | grep 200` ]]; then
+        statusCode=$(curl --connect-timeout 30 --write-out '%{http_code}' --silent --output /dev/null http://${dn})
+		if [[ ${statusCode} =~ ^5.{2}$|^000$ ]]; then
 			echo -e "Checking $dn"
-			curl -I http://"$dn" | grep 200
+			#curl -I https://"$dn" | grep 200
             domainCurrentStatus="FAIL"
-			my_text="⚠️ "$dn" DOWN - Checking now ⚠️ "
-			telegram_send
+            my_text="⚠️ "$dn" DOWN - Checking now ⚠️ "
+            telegram_send
 		fi
+        echo $dn : $domainCurrentStatus
         # NOTIFY OK AFTER FAIL
         if [[ $domainOldStatus == "FAIL" && $domainCurrentStatus == "OK" ]]; then
-            my_text="✅ "$dn" Access OK after FAIL ✅ "
+            my_text="✅ "$dn" Access OK After FAIL ✅ "
             telegram_send
         fi
         # EXPORT current domain status to FILE
@@ -86,10 +87,14 @@ domain_checker(){
 
 domain_checker2(){
     for dn in "${domain_name[@]}"; do
-        if [[ ! -z `curl -I http://"$dn" --connect-timeout 30 | grep 200` ]]; then
+        statusCode=$(curl --connect-timeout 30 --write-out '%{http_code}' --silent --output /dev/null http://${dn})
+        if [[ ! ${statusCode} =~ ^5.{2}$|^000$ ]]; then
             echo -e "Checking "$dn""
-            curl -I http://"$dn" | grep 200
+            #curl -I https://"$dn" | grep 200
             my_text="✅ "$dn" Access OK ✅ "
+            telegram_send
+        else
+            my_text="✅ "$dn" Access FAIL ✅ "
             telegram_send
         fi
     done
@@ -150,11 +155,16 @@ daily_report(){
     unset inode_usage; unset bw; unset bw_incoming; unset bw_outcoming;
 }
 
+check_bot(){
+    test="CHECKING COMPLETED!"
+    curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=${test}"
+}
+
 main(){
     #auto_check
+    #check_bot
     daily_report
     domain_checker
 }
 
 main
-

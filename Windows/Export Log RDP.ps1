@@ -31,7 +31,7 @@ function main {
         1 {listIPRDP}
         2 {getCritical_Error_WarningLog('Application')}
         3 {getCritical_Error_WarningLog('system')}
-        4 {"It is nothing. Author: Night Barron"}
+        4 {Write-Host 'It is nothing. Author: Night Barron'}
     }
 }
 
