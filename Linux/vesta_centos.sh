@@ -9,7 +9,7 @@ installRemiPHP(){
     yum install epel-release yum-utils -y
     yum install http://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
     yum-config-manager --enable remi-php${1}
-    yum install php php-common php-opcache php-mcrypt php-cli php-gd php-curl php-mysqlnd php-mssql -y
+    yum install php php-common php-opcache php-mcrypt php-cli php-gd php-curl php-mysqlnd php-mssql php-json -y
     service httpd reload
 }
 

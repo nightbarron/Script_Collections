@@ -185,14 +185,65 @@ def bank(update, context):
     resultBill += " * Total: " + "{:,.2f} VND".format(total)
     update.message.reply_text(resultBill)
 
+def dm(update, context):
+    domain = str(update.message.text).split(" ")[1]
+    chat_id = update.message.chat_id
+    statement = "sh LIB_botTelegram/checkDomain.sh " + str(chat_id) + " " + str(domain) + " " + "O"
+    os.system(statement)
+    #update.message.reply_text("This is the SSL")
+    return 0
+
+def dmrecord(update, context):
+    domain = str(update.message.text).split(" ")[1]
+    chat_id = update.message.chat_id
+    statement = "sh LIB_botTelegram/checkDomain.sh " + str(chat_id) + " " + str(domain) + " " + "F"
+    os.system(statement)
+    #update.message.reply_text("This is the SSL")
+    return 0
+
+def passWord(update, context):
+    try:
+        length = str(update.message.text).split(" ")[1]
+        if (int(length) <= 0 or int(length) >= 500):
+            update.message.reply_text("Getshit DONE!!!")
+            return 0
+    except:
+        length = 0
+    chat_id = update.message.chat_id
+    statement = "sh LIB_botTelegram/randomPass.sh " + str(chat_id) + " " + str(length)
+    os.system(statement)
+    return 0
+
+
+def ping(update, context):
+    ip_check = str(update.message.text).split(" ")[1]
+    options = str(update.message.text).split(" ")[2]
+    chat_id = update.message.chat_id
+    statement = "sh LIB_botTelegram/checkIP.sh " + str(chat_id) + " " + str(ip_check) + " " + str(options).upper()
+    os.system(statement)
+    return 0
+
+
+
 def main():
     updater = Updater('1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E', use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('check',check))
     dp.add_handler(CommandHandler('ssl', ssl))
 
+    # Domain check
+    dp.add_handler(CommandHandler('dm', dm))
+    dp.add_handler(CommandHandler('dmrecord', dmrecord))
+
     #bank
     dp.add_handler(CommandHandler('bank', bank))
+
+    #pass
+    dp.add_handler(CommandHandler('pass', passWord))
+
+    #check International
+    #pass
+    dp.add_handler(CommandHandler('ping', ping))
 
     # Add conversation handler for create SSL
     genssl_conv_handler = ConversationHandler(

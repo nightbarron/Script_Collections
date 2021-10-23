@@ -1,0 +1,10 @@
+LV2: 5 -> 25 ca/w
+LV1: 8 -> 40 ca/w
+
+Per Week: >= 49 ca (21 buổi - 2 lv 2 ca 1 = 19)
+    + LV2: 5 ca 1, 10 ca 2, 10 ca 3  => Tong: 25/w
+    + LV1: 24 ca 2, 16 ca 3, 2 ca 1  => Tong: 42/w (2 extra)
+
+Total: 5 week
+    + Lv1: 10 ca 1 (2 bạn 2 ca 1)
+    
