@@ -1,21 +1,29 @@
  #!/bin/bash
 chat_id="-567723202"        # Default
 domainName=""
-token="1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E"
+token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo"
 
 # pip install sslchecker
 
 checkDomain() {
     ip=`host ${domainName} | awk '{print $4}' | head -n 1`
-    record=`host -a ${domainName} 8.8.8.8 | grep ^${domainName} | grep "NS\|A\|SOA\|HINFO" | sort -k 4 | awk '{print $1 " " $4 "\t" $5}'`
-    flag=`echo $record | awk '{print $2}'`
+    recordF=`host -a ${domainName} 8.8.8.8 | grep ^${domainName} | grep "NS\|A\|SOA\|HINFO" | sort -k 4 | awk '{print $1 " " $4 "\t" $5}'`
+    
+    # Get NS
+    record=`dig ${domainName} NS | egrep "^${domainName}" | awk '{print $5}' | head -n 1`
+    flag=`echo ${record} | awk '{print $2}'`
+
+    # Get Cloudflare
+    isCloudflare=`echo ${record} | rev | cut -d '.' -f3 | rev `
     hinfo="HINFO"
     if [ ${mode} = 'O' ]; then
         if [ ${#ip} -lt 8 ]; then
             curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=RESULT: ${domainName} did not resolve IP!"
         else
             #echo ${flag}
-            if [ ${flag} = "HINFO" ]; then
+            echo ${isCloudflare}
+            #if [ ${flag} = "HINFO" ]; then
+            if [ ${isCloudflare} = "cloudflare" ]; then
                 curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=RESULT: ${domainName} point to CloudFlare!"
             else
                 curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=RESULT: ${domainName} point to ${ip}"
@@ -23,7 +31,7 @@ checkDomain() {
         fi
     else 
         curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=RESULT:
-${record}"
+${recordF}"
     fi
 }
 

@@ -31,7 +31,8 @@ def check(update, context):
     os.system(statement)
 
 def ssl(update, context):
-    domain = str(update.message.text).split(" ")[1]
+    domain = str(" ".join(str(update.message.text).strip().split())).split()[1]
+    #print("Message: ", " ".join(str(update.message.text).strip().split()))
     chat_id = update.message.chat_id
     statement = "sh LIB_botTelegram/ssl.sh " + str(chat_id) + " " + str(domain)
     os.system(statement)
@@ -186,15 +187,24 @@ def bank(update, context):
     update.message.reply_text(resultBill)
 
 def dm(update, context):
-    domain = str(update.message.text).split(" ")[1]
+    domain = str(" ".join(str(update.message.text).strip().split())).split()[1]
+    #domain = domain.strip()
     chat_id = update.message.chat_id
     statement = "sh LIB_botTelegram/checkDomain.sh " + str(chat_id) + " " + str(domain) + " " + "O"
     os.system(statement)
     #update.message.reply_text("This is the SSL")
     return 0
 
+def curl(update, context):
+    url = str(" ".join(str(update.message.text).strip().split())).split()[1]
+    chat_id = update.message.chat_id
+    statement = "sh LIB_botTelegram/curl.sh " + str(chat_id) + " " + str(url)
+    os.system(statement)
+    #update.message.reply_text("This is the SSL")
+    return 0
+
 def dmrecord(update, context):
-    domain = str(update.message.text).split(" ")[1]
+    domain = str(" ".join(str(update.message.text).strip().split())).split()[1]
     chat_id = update.message.chat_id
     statement = "sh LIB_botTelegram/checkDomain.sh " + str(chat_id) + " " + str(domain) + " " + "F"
     os.system(statement)
@@ -216,17 +226,51 @@ def passWord(update, context):
 
 
 def ping(update, context):
-    ip_check = str(update.message.text).split(" ")[1]
-    options = str(update.message.text).split(" ")[2]
+    ip_check = str(" ".join(str(update.message.text).strip().split())).split()[1]
+    try:
+        options = str(" ".join(str(update.message.text).strip().split())).split()[2]
+    except:
+        options = "L"
+    if (len(str(options)) <= 0): options = "L"
+    #print("Options: ", options)
+    options = options.strip()
     chat_id = update.message.chat_id
     statement = "sh LIB_botTelegram/checkIP.sh " + str(chat_id) + " " + str(ip_check) + " " + str(options).upper()
     os.system(statement)
     return 0
 
 
+def tag(update, context):
+    mode = str(" ".join(str(update.message.text).strip().split())).split()[1]
+    listUser = {'Nam Lưu': 1076498380, 'Tuấn Đặng': 1753149166, 'Huy Ngô': 1458296682, 'Hải Anh': 1740013393, 'Đạt Trần': 2138787778, 'Hoà Lê': 1800256365}
+    result = ''
+    if len(mode) <= 0: mode = 'err'
+    if mode == 'all':
+        for user in listUser:
+            #print(listUser[user])
+            result += "["+ user +"](tg://user?id="+str(listUser[user])+"), "
+        #user = "[Tuan Dang](tg://user?id="+str(id)+")"
+
+        update.message.reply_text(result, parse_mode='markdown')
+    else:
+        update.message.reply_text('Wrong command!', parse_mode='markdown')
+    return 0
+
+def id(update, context):
+    first_name = update.message.from_user.first_name
+    id = update.message.from_user.id
+    last_name = update.message.from_user.last_name
+    username = update.message.from_user.username
+    result = (
+        f"Hello @{username}! Welcome to IT Chicken Bot\n"
+        f"Your ID: {id}\n"
+        f"Your name: {first_name} {last_name}"
+    )
+    update.message.reply_text(result)
+    return 0
 
 def main():
-    updater = Updater('1741302312:AAEYs97TnxuuKKvq5h94IARA1haWyNAG21E', use_context=True)
+    updater = Updater('1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo', use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('check',check))
     dp.add_handler(CommandHandler('ssl', ssl))
@@ -235,14 +279,22 @@ def main():
     dp.add_handler(CommandHandler('dm', dm))
     dp.add_handler(CommandHandler('dmrecord', dmrecord))
 
+    # Curl
+    dp.add_handler(CommandHandler('curl', curl))
+
     #bank
     dp.add_handler(CommandHandler('bank', bank))
 
     #pass
     dp.add_handler(CommandHandler('pass', passWord))
 
+    #tag
+    dp.add_handler(CommandHandler('tag', tag))
+
+    #id
+    dp.add_handler(CommandHandler('id', id))
+
     #check International
-    #pass
     dp.add_handler(CommandHandler('ping', ping))
 
     # Add conversation handler for create SSL
