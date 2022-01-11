@@ -3,7 +3,7 @@
 chat_id="-567723202"        # Default
 chat_id=$1
 domainName=""
-token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo"
+token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYoo"
 IP_check=$2
 option_check=$3
 

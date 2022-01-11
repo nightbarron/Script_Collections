@@ -9,7 +9,7 @@ domainName=""
 organName=""
 provinceName=""
 emailAddress=""
-token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo"
+token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYoo"
 
 createSSL() {
 
