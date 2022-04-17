@@ -62,7 +62,8 @@ function main() {
 		ubuntu
 	fi
     echo 'GRUB_CMDLINE_LINUX_DEFAULT="intel_pstate=disable"' >> /etc/default/grub
-    grub2-mkconfig -o /boot/grub2/grub.cfg
+    grub2-mkconfig > /boot/grub2/grub.cfg
+	grub2-mkconfig > /boot/efi/EFI/centos/grub.cfg
 
 }
 

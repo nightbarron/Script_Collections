@@ -6,7 +6,7 @@ token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYoo"
 # pip install sslchecker
 
 checkSSL() {
-    curl -vI https://${domainName} &> /tmp/ssl.tmp
+    curl -vkI https://${domainName} &> /tmp/ssl.tmp
     result="$(cat /tmp/ssl.tmp | grep -Pzo '\* Server certificate:((.|\n)*(C=.*))')"
     rm -rf /tmp/ssl.tmp
     if [[ ${#result} -eq 0 ]]; then
