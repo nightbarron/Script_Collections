@@ -15,6 +15,8 @@ function listIPRDP{
     Write-Host $tables
 }
 
+# timeout 120
+
 function getCritical_Error_WarningLog($type){
     Write-Host "If you see ERROR: No events were found"
     Get-WinEvent –FilterHashtable @{logname=$type; level=1,2,3}  | Sort-Object -Property TimeCreated | Format-Table -Wrap

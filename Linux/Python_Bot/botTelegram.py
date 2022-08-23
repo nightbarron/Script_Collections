@@ -1,4 +1,9 @@
 #!/bin/python3
+
+# Require: yum install bind-utils jq (dig command)
+# Require: python -m pip install paramiko
+
+
 from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, ParseMode
 from telegram.ext import (
     Updater,
@@ -10,6 +15,8 @@ from telegram.ext import (
 )
 import os, logging, json
 from datetime import date,datetime
+
+from LIB_botTelegram import aaPanel
 
 #Global Variables
 gensslStep = 0
@@ -242,7 +249,7 @@ def ping(update, context):
 
 def tag(update, context):
     mode = str(" ".join(str(update.message.text).strip().split())).split()[1]
-    listUser = {'Nam Lưu': 1076498380, 'Tuấn Đặng': 1753149166, 'Huy Ngô': 1458296682, 'Hải Anh': 1740013393, 'Đạt Trần': 2138787778, 'Hoà Lê': 1800256365}
+    listUser = {'Nam Lưu': 1076498380, 'Tuấn Đặng': 1753149166, 'Huy Ngô': 1458296682, 'Hải Anh': 1740013393, 'Đạt Trần': 2138787778, 'Hoà Lê': 1800256365, 'Thanh Hoàng': 5567151417, 'Doãn Anh': 1211523861}
     result = ''
     if len(mode) <= 0: mode = 'err'
     if mode == 'all':
@@ -269,8 +276,19 @@ def id(update, context):
     update.message.reply_text(result)
     return 0
 
+def roomid(update, context):
+    id = update.message.chat.id
+    name = update.message.chat.title
+    result = (
+        f"Hello @! Welcome to IT Chicken Bot\n"
+        f"Room ID: {id}\n"
+        f"Room name: {name}"
+    )
+    update.message.reply_text(result)
+    return 0
+
 def main():
-    updater = Updater('1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYoo', use_context=True)
+    updater = Updater('1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo', use_context=True)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('check',check))
     dp.add_handler(CommandHandler('ssl', ssl))
@@ -293,6 +311,9 @@ def main():
 
     #id
     dp.add_handler(CommandHandler('id', id))
+
+    #roomid
+    dp.add_handler(CommandHandler('roomid', roomid))
 
     #check International
     dp.add_handler(CommandHandler('ping', ping))

@@ -1,5 +1,7 @@
 #!/bin/bash
 # REQUIRE jq
+
+
 chat_id="-567723202"        # Default
 chat_id=$1
 domainName=""
