@@ -7,7 +7,8 @@ DATE_BACKUP=$(date +%y%m%d)
 KEEP_BACKUPS_FOR=3 # DAYS
 
 function main(){
-    files=`ls -1 $DIR`
+    cd $DIR
+    files=`ls -1 \*.log`
     for file in $files
     do
         #echo $file
