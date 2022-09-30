@@ -9,7 +9,7 @@ domainName=""
 organName=""
 provinceName=""
 emailAddress=""
-token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYoo"
+token="1741302312:AAHUJEV2WsKzCu8wBF6Uq9zwBPL7F724wYo"
 
 createSSL() {
 
@@ -24,9 +24,13 @@ createSSL() {
         openssl req -new -newkey rsa:2048 -nodes -out "${location}/${fileName}.csr" -keyout "${location}/${fileName}.key" \
         -subj "/C=VN/ST=${provinceName}/L=${provinceName}/O=${organName}/OU=IT Department/CN=${domainName}/emailAddress=${emailAddress}"
         #echo ${chat_id}
-        curl "https://api.telegram.org/bot"${token}"/sendDocument?chat_id="${chat_id} -F document=@"${location}/${fileName}.csr"
-        #echo "CSR"
-        curl "https://api.telegram.org/bot"${token}"/sendDocument?chat_id="${chat_id} -F document=@"${location}/${fileName}.key" --http2
+        result=`cat ${location}/${fileName}.csr`
+        curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=<code>${result}</code>&parse_mode=HTML"
+        #echo "KEY"
+        # curl "https://api.telegram.org/bot"${token}"/sendDocument?chat_id="${chat_id} -F document=@"${location}/${fileName}.key" --http2
+        
+        result=`cat ${location}/${fileName}.key`
+        curl -X POST "https://api.telegram.org/bot"$token"/sendMessage" -d "chat_id="${chat_id}"&text=<code>${result}</code>&parse_mode=HTML"
         rm -rf ${location}
     } || {
         result="⚠️ Can't Create CSR, KEY for ${domainName} ⚠️"

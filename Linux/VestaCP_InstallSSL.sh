@@ -10,6 +10,7 @@ getDomainBackground(){
     PATH='/home/'${USER}'/conf/web/'
     echo ">> Finding IP:"
     IP=`/bin/ls /etc/nginx/conf.d/ | /bin/egrep "^([0-9]{1,3}\.){3}[0-9]*" -o`
+    IP=${IP[0]}
     echo " [*] IP: ${IP}"
     echo
 }
