@@ -13,6 +13,7 @@ function listIPRDP{
     #$Results | Select TimeCreated, ClientIP, Username | Export-Csv C:\RDS.csv -NoType
     $tables = $Results | Format-Table -Wrap | Out-String 
     Write-Host $tables
+    timeout 120
 }
 
 # timeout 120
