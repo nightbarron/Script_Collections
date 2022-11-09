@@ -1,7 +1,59 @@
 #!/bin/bash
 port=$2
+sw=$1
+ip=$1
 if [ ${#port} -lt 1 ] 
 then 
 	port='22' 
 fi
-ssh -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no admin@${1} -p ${port}
+
+case $sw in
+BN12SWA01)
+  ip='103.90.224.3';;
+BQ08SWA01)
+  ip='103.90.224.8';;
+BQ09SWA01)
+  ip='103.90.227.6';;
+BQ13SWA01)
+  ip='103.90.224.2';;
+BU08SWA01)
+  ip='103.90.224.28';;
+BU09SWA01)
+  ip='103.90.224.14';;
+BU12SWA01)
+  ip='103.90.224.26';;
+BU15SWA01)
+  ip='103.90.224.9';;
+BU16SWA01)
+  ip='103.90.224.200';;
+BX14SWA01)
+  ip='103.90.224.10';;
+CE31SWA01)
+  ip='103.90.224.13';;
+BN10SWA01)
+  ip='103.90.224.32';;
+CL11SWA01)
+  ip='103.90.225.224';;
+CI32SWA01)
+  ip='103.90.224.5';;
+BU09SWF01)
+  ip='103.90.224.20';;
+BN10SWF01)
+  ip='103.90.224.60';;
+BN10SWF02)
+  ip='103.90.224.64';;
+BQ08SWF01)
+  ip='103.90.224.6';;
+BQ08SWF02)
+  ip='103.90.224.7';;
+AZ15SWA01)
+  ip='103.200.20.237';;
+AZ15SWF01)
+  ip='103.200.20.189';;
+Az15SWF02)
+  ip='103.200.20.173';;
+*)
+  ip=$1;;
+esac
+
+ssh -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no tuan.dang@${ip} 
