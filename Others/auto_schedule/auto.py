@@ -69,9 +69,15 @@ def checkDatabase():
         ca1 += mem["ca1"]
         ca2 += mem["ca2"]
         ca3 += mem["ca3"]
-    if (ca1 < numOfWeek*7): return False
-    if (ca2 < numOfWeek*7*3): return False
-    if (ca3 < numOfWeek*7*3): return False
+    if (ca1 < numOfWeek*7): 
+        print("Not enough ca1")
+        return False
+    if (ca2 < numOfWeek*7*3): 
+        print("Not enough ca2")
+        return False
+    if (ca3 < numOfWeek*7*3): 
+        print("Not enough ca3")
+        return False
     return True
 
 # soCA is the number of peopleo in ca in week

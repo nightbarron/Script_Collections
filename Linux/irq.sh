@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 declare -a -r 	INTERFACES=( $(ip link show | grep -v '@' | awk '/state UP/ {gsub(":","",$2) ; print $2}') )
 declare -r 	CPUS=$(awk '/^processor/ {i++} END{print i}' /proc/cpuinfo)
-declare -r 	RPS_BITMAPS=4
+#declare -r 	RPS_BITMAPS=4
+declare		RPS_BITMAPS=4
 declare -r 	XPS_BITMAPS=2
 declare -r 	RPS_SOCK_FLOW_ENTRIES=32768
 
@@ -10,8 +11,8 @@ function cmd () {
 	LOG_FILE="${LOG_FILE:=/dev/null}"
 	local timestamp=`date +%Y-%m-%d:%H:%M`
 	if ${DEBUG:=true} ; then
-		echo -e "[$timestamp ${FUNCNAME[1]}]: ${@}" | tee -a ${LOG_FILE} 1>&2 
-	else	
+		echo -e "[$timestamp ${FUNCNAME[1]}]: ${@}" | tee -a ${LOG_FILE} 1>&2
+	else
 		echo -e "[$timestamp ${FUNCNAME[1]}]: ${@}" >> ${LOG_FILE}
 	fi
 
@@ -45,19 +46,39 @@ function rss() {
 	do
 		irqs=($(grep -E "${int}-" /proc/interrupts | awk '{print $1}' | tr -d ':'))
 		cpu=$CPUS
+
 		for irq in "${irqs[@]}"
 		do
+			declare -a smp_map=()
 			[[ ! $cpu -ge 0 ]] && break
-			smp_map="1"
-			for (( i=cpu-1 ; i > 0 ; i-- )) 
-			do 
-				smp_map+=0
+			smp_map_tmp="1"
+			for (( i=cpu-1 ; i > 0 ; i-- ))
+			do
+				smp_map_tmp+=0
 			done
-			cmd "#--> bitmap=${smp_map} | cpu=$cpu | irq=$irq "
-			smp_map=`printf '%x\n' "$((2#${smp_map}))"`
-			cmd "echo ${smp_map} > /proc/irq/${irq}/smp_affinity"
+
+			# Strip each 32 bit of smp_map_tmp to smp_map[]
+			while [ ${#smp_map_tmp} -gt 32 ]
+			do
+				echo ${#smp_map_tmp}
+				smp_map_tmp=${smp_map_tmp:0:${#smp_map_tmp} - 32}
+				smp_map=("0" "${smp_map[@]}")
+			done
+
+			# for (( idx=${#MYARRAY[@]}-1 ; idx>=0 ; idx-- )) ; do
+			# 	echo "${MYARRAY[idx]}"
+			# done
+
+
+			smp_map=(`printf '%x\n' "$((2#${smp_map_tmp}))"` "${smp_map[@]}")
+			cmd "#--> bitmap=${smp_map[@]} | cpu=$cpu | irq=$irq "
+			map=`echo ${smp_map[@]} | tr " " ","`
+			cmd "echo ${map} > /proc/irq/${irq}/smp_affinity"
 			let "cpu--"
+
+			unset smp_map
 		done
+
 	done
 }
 
@@ -66,34 +87,56 @@ function rxps() {
 	for int in ${INTERFACES[@]}
         do
 		# rps
-		for rps_cpus in /sys/class/net/${int}/queues/rx-*/rps_cpus	
+		for rps_cpus in /sys/class/net/${int}/queues/rx-*/rps_cpus
 		do
 			# create randomly rps_position
 			declare -A rps_position=()
+			if (( ${RPS_BITMAPS} > ${CPUS} ))
+			then
+				RPS_BITMAPS=${CPUS}
+			fi
 			for (( i = 1; i <= RPS_BITMAPS; i++ ))
 			do
 				num=$(( (RANDOM % CPUS ) + 1 ))
-				while (( rps_position[$num] ))
+				# BUG HERE
+				while (( ${#rps_position[$num]} > 0 ))
 				do
 					num=$(( (RANDOM % CPUS ) + 1 ))
 				done
 				rps_position[$num]=$num
-			done	
-			
+			done
 			# Create rps_bitmap
-			rps_bitmap=""
+			declare -a rps_bitmap=()
+			rps_bitmap_tmp=""
 			for (( i=CPUS; i> 0; i-- ))
 			do
 				if (( rps_position[$i] ))
 				then
-					rps_bitmap+=1
+					rps_bitmap_tmp+=1
 				else
-					rps_bitmap+=0
+					rps_bitmap_tmp+=0
 				fi
 			done
-			cmd "#--> File: $rps_cpus | CPUs: ${rps_position[@]} | rps_bitmap: ${rps_bitmap} "
-			rps_bitmap=`printf '%x' $(( 2#${rps_bitmap} ))`
-			cmd "echo ${rps_bitmap} > ${rps_cpus}"
+
+			# Strip each 32 bit to one hex value
+			while [ ${#rps_bitmap_tmp} -gt 32 ]
+			do
+				tmp=${rps_bitmap_tmp:${#rps_bitmap_tmp} - 32:32}
+				value=`printf '%x' $(( 2#${tmp} ))`
+				rps_bitmap_tmp=${rps_bitmap_tmp:0:${#rps_bitmap_tmp} - 32}
+				rps_bitmap=("${value}" "${rps_bitmap[@]}")
+			done
+
+			unset value
+			value=`printf '%x' $(( 2#${rps_bitmap_tmp} ))`
+			rps_bitmap=("${value}" "${rps_bitmap[@]}")
+
+			cmd "#--> File: $rps_cpus | CPUs: ${rps_position[@]} | rps_bitmap: ${rps_bitmap[@]} "
+
+			map=`echo ${rps_bitmap[@]} | tr " " ","`
+			cmd "echo ${map} > ${rps_cpus}"
+
+			unset rps_bitmap
 		done
 
 		# xps
@@ -112,19 +155,37 @@ function rxps() {
                         done
 
                         # Create xps_bitmap
-                        xps_bitmap=""
+						declare -a xps_bitmap=()
+
+                        xps_bitmap_tmp=""
                         for (( i=CPUS; i> 0; i-- ))
                         do
                                 if (( xps_position[$i] ))
                                 then
-                                        xps_bitmap+=1
+                                        xps_bitmap_tmp+=1
                                 else
-                                        xps_bitmap+=0
+                                        xps_bitmap_tmp+=0
                                 fi
                         done
-                        cmd "#--> File: $xps_cpus | CPUs: ${xps_position[@]} | xps_bitmap: ${xps_bitmap} "
-                        xps_bitmap=`printf '%x' $(( 2#${xps_bitmap} ))`
-                        cmd "echo ${xps_bitmap} > ${xps_cpus}"
+
+						while [ ${#xps_bitmap_tmp} -gt 32 ]
+						do
+							tmp=${xps_bitmap_tmp:${#xps_bitmap_tmp} - 32:32}
+							value=`printf '%x' $(( 2#${tmp} ))`
+							xps_bitmap_tmp=${xps_bitmap_tmp:0:${#xps_bitmap_tmp} - 32}
+							xps_bitmap=("${value}" "${xps_bitmap[@]}")
+						done
+
+						unset value
+						value=`printf '%x' $(( 2#${xps_bitmap_tmp} ))`
+						xps_bitmap=("${value}" "${xps_bitmap[@]}")
+
+                        cmd "#--> File: $xps_cpus | CPUs: ${xps_position[@]} | xps_bitmap: ${xps_bitmap[@]} "
+
+						map=`echo ${xps_bitmap[@]} | tr " " ","`
+                        cmd "echo ${map} > ${xps_cpus}"
+
+						unset xps_bitmap
                 done
 	done
 }
@@ -158,4 +219,3 @@ main () {
 }
 
 main
-

@@ -3,88 +3,88 @@
         {
             "id": "001",
             "name": "Tạ Nhật Tân",
-            "ca1": 5,
+            "ca1": 0,
             "ca2": 10,
-            "ca3": 10
+            "ca3": 0
         },
         {
             "id": "002",
             "name": "Đồng Minh Nhật",
             "ca1": 5,
-            "ca2": 10,
-            "ca3": 10
+            "ca2": 15,
+            "ca3": 15
         },
         {
             "id": "003",
             "name": "Lưu Đức Hòa",
             "ca1": 5,
-            "ca2": 10,
-            "ca3": 10
+            "ca2": 15,
+            "ca3": 15
         },
         {
             "id": "004",
-            "name": "Phan Thành Đạt",
-            "ca1": 5,
-            "ca2": 10,
+            "name": "Đoàn Duy Thức",
+            "ca1": 0,
+            "ca2": 0,
             "ca3": 10
         },
         {
             "id": "005",
             "name": "Trương Hoàng Khanh",
             "ca1": 5,
-            "ca2": 10,
-            "ca3": 10
+            "ca2": 5,
+            "ca3": 0
+        },
+        {
+            "id": "006",
+            "name": "Đặng Lê Hoàng Tuấn",
+            "ca1": 5,
+            "ca2": 5,
+            "ca3": 0
         }
     ],
     "lv1": [
         {
-            "id": "006",
-            "name": "Đinh Thị Giang Thanh",
-            "ca1": 2,
-            "ca2": 0,
-            "ca3": 20
-        },
-        {
             "id": "007",
-            "name": "Mari Hạnh",
-            "ca1": 2,
+            "name": "Lê Thanh Hoàng",
+            "ca1": 4,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         },
         {
             "id": "008",
-            "name": "Mai Chí Cường",
-            "ca1": 2,
+            "name": "Nguyễn Lâm Y Khang",
+            "ca1": 4,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         },
         {
             "id": "009",
-            "name": "Đặng Lê Hoàng Tuấn",
-            "ca1": 1,
+            "name": "Lưu Tấn Lĩnh",
+            "ca1": 4,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         },
         {
             "id": "010",
-            "name": "Ngô Xuân Huy",
-            "ca1": 1,
+            "name": "Trần Doãn Anh",
+            "ca1": 4,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         },
         {
             "id": "011",
-            "name": "Lưu Công Nam",
-            "ca1": 1,
+            "name": "Nguyễn Minh Luân",
+            "ca1": 0,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         },
         {
             "id": "012",
-            "name": "Nguyễn Bùi Hải Anh",
-            "ca1": 1,
+            "name": "Trần Huỳnh Phong",
+            "ca1": 0,
             "ca2": 15,
-            "ca3": 10
+            "ca3": 15
         }
     ]
 }

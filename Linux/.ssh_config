@@ -1,0 +1,262 @@
+ForwardAgent yes
+
+Host mirrorMAIN.vietnix.vn
+ HostName 125.212.216.197
+
+Host cloudvcenter.vietnix.vn
+ HostName 10.23.99.3
+ UpdateHostKeys no
+ ProxyJump awx2.vietnix.vn
+
+Host netmon-nix.vietnix.vn
+ HostName 103.200.23.99
+ Port 65022
+
+Host netmon-ixp.vietnix.vn
+ HostName 103.200.23.99
+ Port 65021
+
+Host mirrorVNPT.vietnix.vn
+ HostName 103.200.22.60
+
+Host dev.vietnix.dev
+ HostName 222.255.117.208
+
+Host backend.vietnix.vn
+ Hostname 103.200.20.17
+
+Host binstorage-goptimizer.vietnix.vn
+ Hostname 14.225.204.41
+
+Host backend.checknet.vn
+ Hostname 103.90.227.39
+
+Host zimbra.vietnix.vn
+ Hostname 103.200.23.99
+ Port 2022
+
+Host caching.tuandlh.info
+ Hostname 103.200.20.187
+
+Host proxy.internal.k8s.vietnix.xyz
+ Hostname 103.200.22.69
+
+Host hoalevpslinux.vietnix.xyz
+ Hostname 103.90.227.162
+
+Host xdp.vmx.testing.vietnix.xyz
+ Hostname 222.255.214.129
+
+Host analyzer1.vietnix.vn
+ HostName 103.200.23.99
+ Port 65020
+
+Host vcenter
+ User deployment
+ HostName 222.255.214.222
+ Port 111
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host webfirewall1.vietnix.vn
+ HostName 10.23.99.141
+ ProxyJump proxy-internal.vietnix.vn
+
+Host toolgb.vultr.vietnix.vn
+ HostName 144.202.106.12
+
+Host taonemay.fnix.asia
+ HostName 103.90.225.95
+
+Host backup-dev.k8s.vietnix.xyz
+ HostName 14.225.253.246
+
+Host web.firewall.vietnix.vn
+ HostName 14.225.217.64
+
+Host logstash.k8s.vietnix.xyz
+ Hostname 14.225.253.12
+
+Host dienFW30.vietnix.vn
+ HostName 14.225.253.30
+
+Host sw-tunnel.vietnix.vn
+ HostName 103.90.227.233
+
+Host BQ08_Server-Mgmt.vietnix.vn
+ HostName 103.200.23.250
+
+Host k8master.vietnix.xyz
+ HostName 14.225.212.131
+
+Host k8worker01.vietnix.xyz
+ HostName 10.254.153.11
+ ProxyJump k8master.vietnix.xyz
+
+Host k8worker02.vietnix.xyz
+ HostName 10.254.153.12
+ ProxyJump k8master.vietnix.xyz
+
+Host k8worker03.vietnix.xyz
+ HostName 10.254.153.13
+ ProxyJump k8master.vietnix.xyz
+
+Host k8worker04.vietnix.xyz
+ HostName 10.254.153.14
+ ProxyJump k8master.vietnix.xyz
+
+Host agent01.jenkins.k8s.vietnix.xyz
+ HostName 10.254.153.101
+ ProxyJump k8master.vietnix.xyz
+
+Host openresty.tuandlh.info
+ HostName 103.200.23.70
+
+Host test1.web.vietnix.vn
+ HostName 14.225.198.190
+
+Host noteCenter.tuandlh.info
+ HostName 14.225.255.165
+
+Host awx.vietnix.vn
+ HostName 103.200.23.99
+ Port 2622
+
+Host awx2.vietnix.vn
+ HostName 14.225.208.13
+ Port 2622
+
+Host wireguard.vietnix.vn
+ Hostname 125.212.216.207
+
+Host es.router.vietnix.xyz
+ Hostname 14.225.255.41
+
+Host server-mgmt.vietnix.vn
+ Hostname 103.200.23.250
+
+Host openflow.controller.vietnix.vn
+ Hostname 14.225.254.97
+
+Host netmon.vietnix.vn
+ HostName 103.200.21.198
+
+Host es.vietnix.vn
+ HostName 103.90.226.158
+
+#Host fastnetmon.vietnix.vn
+# Hostname 103.90.224.251
+
+Host dienFW140.vietnix.vn
+ HostName 14.225.198.140
+
+
+Host fw.fnix.asia
+ HostName 103.90.224.130
+ Port 2
+ #ProxyJump techgate
+
+Host k8s.tech.master.vietnix.vn
+ HostName 125.212.217.76
+
+Host software.vietnix.vn
+ HostName 125.212.217.112
+
+Host k8s.tech.worker01.vietnix.vn
+ HostName 125.212.217.77
+
+Host fw01-mainsite.vietnix.vn
+ HostName 103.90.224.90
+
+Host fw02-mainsite.vietnix.vn
+ HostName 14.225.253.240
+
+Host vps.fnix.asia
+ HostName 103.90.224.130
+
+Host runner.vietnix.vn
+ HostName 103.200.20.139
+
+Host proxy-internal.vietnix.vn
+ HostName 103.200.23.99
+
+Host ngxfw.vietnix.vn
+ HostName 103.200.22.145
+
+Host openldap.fnix.asia
+ HostName 103.200.22.222
+ Port 222
+
+Host monitor.fnix.asia
+ HostName 103.200.22.222
+ Port 234
+
+Host Gateway.tuandlh.info
+ HostName 103.200.22.222
+
+Host mgmt-server.vietnix.vn
+    Hostname 103.200.23.250
+
+Host firewall-mainsite.vietnix.vn
+    HostName 103.200.21.192
+    IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host fwmiti01.vietnix.vn
+    HostName 103.200.23.99
+    Port 65101
+
+Host fwmiti02.vietnix.vn
+    HostName 103.200.23.99
+    Port 65102
+
+Host techgate
+ User root
+ HostName 171.244.18.3
+ Port 22
+ #LocalForward 9090 0.0.0.0:0
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host botTelegram.vietnix.vn
+ HostName 103.200.21.22
+ Port 222
+
+Host fwtest.vietnix.vn
+ HostName 103.90.224.156
+
+Host centos8.tuandlh.info
+	HostName 103.200.22.222
+	Port 255
+
+ Host *.vietnix.vn
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host *.vietnix.dev
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+ Host *.vietnix.xyz
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host *.fnix.asia
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host *.tuandlh.info
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host *.taonemay.ml
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa
+
+Host *.checknet.vn
+ User root
+ Port 22
+ IdentityFile /Users/tuandlh/.ssh/id_rsa

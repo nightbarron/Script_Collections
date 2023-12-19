@@ -2,58 +2,120 @@
 port=$2
 sw=$1
 ip=$1
-if [ ${#port} -lt 1 ] 
-then 
-	port='22' 
+pass='FCsCfW7NgdY0nGrRpyNVEuQhb'
+pass2='MWE5ZTA0YjQzMzdkNmMxMWU1'
+pass3='vietnix@2023'
+isSW=0
+if [ ${#port} -lt 1 ]
+then
+	port='22'
 fi
 
 case $sw in
 BN12SWA01)
-  ip='103.90.224.3';;
+  ip='192.168.10.16'
+  isSW=1;;
 BQ08SWA01)
-  ip='103.90.224.8';;
+  ip='192.168.10.5'
+  isSW=1;;
 BQ09SWA01)
-  ip='103.90.227.6';;
+  ip='192.168.10.13'
+  isSW=1;;
 BQ13SWA01)
-  ip='103.90.224.2';;
+  ip='192.168.10.14'
+  isSW=1;;
 BU08SWA01)
-  ip='103.90.224.28';;
+  ip='192.168.10.9'
+  isSW=1;;
 BU09SWA01)
-  ip='103.90.224.14';;
+  ip='192.168.10.10'
+  isSW=1;;
 BU12SWA01)
-  ip='103.90.224.26';;
+  ip='192.168.10.11'
+  isSW=1;;
 BU15SWA01)
-  ip='103.90.224.9';;
+  ip='192.168.10.15'
+  isSW=1;;
 BU16SWA01)
-  ip='103.90.224.200';;
+  ip='192.168.10.7'
+  isSW=1;;
 BX14SWA01)
-  ip='103.90.224.10';;
+  ip='192.168.10.6'
+  isSW=1;;
 CE31SWA01)
-  ip='103.90.224.13';;
+  ip='192.168.10.8'
+  isSW=1;;
 BN10SWA01)
-  ip='103.90.224.32';;
+  ip='192.168.10.20'
+  isSW=1;;
 CL11SWA01)
-  ip='103.90.225.224';;
+  ip='192.168.10.17'
+  isSW=1;;
 CI32SWA01)
-  ip='103.90.224.5';;
+  ip='192.168.10.25'
+  isSW=1;;
+AZ16SWA01)
+  ip='192.168.10.33'
+  isSW=1;;
 BU09SWF01)
-  ip='103.90.224.20';;
+  ip='192.168.10.12'
+  isSW=1;;
 BN10SWF01)
-  ip='103.90.224.60';;
+  ip='192.168.10.21'
+  isSW=1;;
 BN10SWF02)
-  ip='103.90.224.64';;
+  ip='192.168.10.22'
+  isSW=1;;
 BQ08SWF01)
-  ip='103.90.224.6';;
+  ip='192.168.10.3'
+  isSW=1;;
 BQ08SWF02)
-  ip='103.90.224.7';;
+  ip='192.168.10.4'
+  isSW=1;;
 AZ15SWA01)
-  ip='103.200.20.237';;
+  ip='192.168.10.29'
+  isSW=1;;
 AZ15SWF01)
-  ip='103.200.20.189';;
-Az15SWF02)
-  ip='103.200.20.173';;
+  ip='192.168.10.30'
+  isSW=1;;
+AZ15SWF02)
+  ip='192.168.10.26'
+  isSW=1;;
+BC23SWA01)
+  ip='192.168.10.105'
+  isSW=1;;
+BQ09SWT01)
+  ip='192.168.10.31'
+  isSW=1;;
+BQ09SWT02)
+  ip='192.168.10.32'
+  isSW=1;;
+R1)
+  ip='192.168.0.65'
+  isSW=2;;
+R2)
+  ip='192.168.0.66'
+  isSW=2;;
+SWTOP201)
+  ip='192.168.0.36'
+  isSW=3;;
+SWTOP202)
+  ip='192.168.0.37'
+  isSW=3;;
 *)
-  ip=$1;;
+  ip=$1
+  isSW=0;;
 esac
 
-ssh -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no tuan.dang@${ip} 
+if [ ${isSW} -eq 1 ]
+then
+  sshpass -p ${pass} ssh -J sw-tunnel.vietnix.vn -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no tuan.dang@${ip}
+elif [ ${isSW} -eq 2 ]
+then
+ sshpass -p ${pass2} ssh -J mgmt-server.vietnix.vn -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no root@${ip}
+elif [ ${isSW} -eq 3 ]
+then
+ sshpass -p ${pass3} ssh -J awx.vietnix.vn -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no admin@${ip}
+else
+  ssh -J sw-tunnel.vietnix.vn -oHostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no admin@${ip}
+fi
